@@ -1,0 +1,101 @@
+﻿@using System.Collections
+@using Newtonsoft.Json
+
+@model MOTILab3.ViewModels.ResultViewModel
+@{
+    ViewData["Title"] = "Resists";
+}
+
+<table class="table table-bordered text-center">
+    <thead>
+        <tr>
+            <th scope="col" rowspan="2">Броня игрока</th>
+            <th scope="col" colspan="@Model.EnemyWeapons.Count()" style="width: 100%; text-align: center">Оружие врага</th>
+        </tr>
+        <tr>
+            @foreach (EnemyWeapon weapon in Model.EnemyWeapons)
+            {
+                <th scope="col">@weapon.WeaponName</th>
+            }
+            <th>Выбор стратегии</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (PlayersArmour armour in Model.PlayersArmours)
+        {
+            <tr class="armourRow" id="row+@armour.ArmourId">
+                <th scope="row">@armour.ArmourName</th>
+                @foreach (var result in Model.ArmourResistanceResults)
+                {
+                    if (result.ArmourId == armour.ArmourId)
+                    {
+                        <td class="ResultCell" id="@result.ArmourId+@result.WeaponId" scope="row">@result.ResistedDamage</td>
+                    }
+                }
+                <td>
+                    <div style="margin-top:20px; text-align:center;">
+                        <input class="btn btn-primary" id="btn" type="button" value="Выбрать" onclick="clickBtn(@armour.ArmourId)" />
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div style="margin-top:20px; text-align:center;">
+    <input class="btn btn-primary" id="btn" type="button" value="Оптимальное решение" onclick="optimalCh()" />
+</div>
+
+<script>
+    function optimalCh() {
+        var rows = document.getElementsByClassName("armourRow");
+        for (var i = 0; i < rows.length; i++) {
+            rows[i].style.backgroundColor = "white";
+            for (var j = 0; j < rows[i].childElementCount; j++) {
+                rows[i].children[j].style.backgroundColor = "white";
+            }
+        }
+        var id = @Model.BestArmour.ArmourId;
+        console.log(id);
+        var armourRow = document.getElementById("row+"+id);
+        armourRow.style.backgroundColor = "orange";
+        var jsonString = '@Html.Raw(JsonConvert.SerializeObject(Model.ArmourResistanceResults))';
+        var arr = JSON.parse(jsonString);
+        var minInd = 0;
+        var minVal = arr[i].ResistedDamage;
+        for (var i = 1; i < arr.length; i++) {
+            if (arr[i].ArmourId == id) {
+                if (arr[i].ResistedDamage < minVal) {
+                    minVal = arr[i].ResistedDamage;
+                    minInd = i;
+                }
+            }
+        }
+        var cell = document.getElementById(id + "+" + arr[minInd].WeaponId);
+        cell.style.backgroundColor = "yellow";
+    }
+    function clickBtn(id) {
+        var rows = document.getElementsByClassName("armourRow");
+        for (var i = 0; i < rows.length; i++) {
+            rows[i].style.backgroundColor = "white";
+            for (var j = 0; j < rows[i].childElementCount; j++) {
+                rows[i].children[j].style.backgroundColor = "white";
+            }
+        }
+        var armourRow = document.getElementById("row+"+id);
+        armourRow.style.backgroundColor = "lightgreen";
+        for (var i = 0; i < armourRow.childElementCount; i++) {
+            armourRow.children[i].style.backgroundColor = "lightgreen";
+        }
+        var jsonString = '@Html.Raw(JsonConvert.SerializeObject(Model.EnemyWeapons))';
+        var arr = JSON.parse(jsonString);
+        var ind = getRandomIntInclusive(0, arr.length - 1);
+        var cell = document.getElementById(id + "+" + arr[ind].WeaponId);
+        cell.style.backgroundColor = "yellow";
+    }
+    function getRandomIntInclusive(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+</script>

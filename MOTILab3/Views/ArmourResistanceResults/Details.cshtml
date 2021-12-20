@@ -1,0 +1,36 @@
+﻿@model MOTILab3.Models.ArmourResistanceResult
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>ArmourResistanceResult</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ArmourId)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ArmourId)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.WeaponId)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.WeaponId)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ResistedDamage)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ResistedDamage)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.ResultId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

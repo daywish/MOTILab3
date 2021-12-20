@@ -1,0 +1,47 @@
+﻿@model IEnumerable<MOTILab3.Models.EnemyWeapon>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.WeaponName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WeaponPhysicalDamage)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WeaponMagicalDamage)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.WeaponName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WeaponPhysicalDamage)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WeaponMagicalDamage)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.WeaponId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.WeaponId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.WeaponId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
